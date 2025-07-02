@@ -1,0 +1,11 @@
+# .env 文件
+# 用于 Prisma migrate（直连）
+DATABASE_URL="postgresql://postgres.aomyqueqnaavftukogsb:12345678aA@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+
+# 用于 Prisma client（连接池，可选）
+DIRECT_URL="postgresql://postgres.aomyqueqnaavftukogsb:12345678aA@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+REDIS_URL=redis://localhost:6379/0
+REDIS_KEYPREFIX=nhblog
+AUTH_JWT_SECRET=WStv-9cSX-9MSC-B9P6-rl2N-729L-nfiD-vUpW
+NEXT_PUBLIC_SUPABASE_URL=https://aomyqueqnaavftukogsb.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvbXlxdWVxbmFhdmZ0dWtvZ3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM5NDUzMTQsImV4cCI6MjA2OTUyMTMxNH0.tnPGC1A9HyIYufj4IJ1VzkWT8ikTHjQG5wxdpdKR7zc

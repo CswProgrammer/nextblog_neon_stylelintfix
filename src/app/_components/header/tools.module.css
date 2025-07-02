@@ -1,0 +1,4 @@
+/* src/app/_components/header/tools.module.css */
+.tools {
+    @apply tw-flex tw-gap-4 tw-items-center;
+}

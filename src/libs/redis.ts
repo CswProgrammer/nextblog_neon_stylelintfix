@@ -1,0 +1,5 @@
+// src/libs/redis.ts
+import { redisConfig } from '@/config/redis';
+import Redis from 'ioredis';
+
+export const redis = new Redis(redisConfig);
