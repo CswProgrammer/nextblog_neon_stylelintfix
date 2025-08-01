@@ -4,15 +4,12 @@ import type { FC } from 'react';
 import type { IPaginateQueryProps } from '../_components/paginate/types';
 import { redirect } from 'next/navigation'; 
 
-import { queryPostPaginate } from '../actions/post';
 import $styles from './page.module.css';
 import { Calendar } from 'lucide-react';
 import { isNil } from 'lodash';
 import Link from 'next/link';
 import Image from 'next/image'; // 修复2: 导入 Image 组件
 import { PostListPaginate } from '../_components/post/paginate';
-import { PostDelete } from '../_components/post/delete';
-import { PostEditButton } from '../_components/post/edit-button';
 import { formatChineseTime } from '@/libs/time';
 import { fetchApi } from '@/libs/api';
 import { PostActionButtons } from '../_components/post/list';

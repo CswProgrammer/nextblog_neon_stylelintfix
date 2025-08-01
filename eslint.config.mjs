@@ -1,5 +1,5 @@
 import antfu from '@antfu/eslint-config';
-import nextPlugin from '@next/eslint-plugin-next';
+import nextPlugin from '@next/eslint-plugin-next/dist/index.js';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import perfectionist from 'eslint-plugin-perfectionist';
