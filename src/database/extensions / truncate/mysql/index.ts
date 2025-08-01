@@ -1,2 +1,2 @@
-export { truncateMySQLTable } from './mysql';
-export type { MySQLConfig, MySQLExtensionConfig } from './types';
+export { truncateMySQLTable } from "./mysql";
+export type { MySQLConfig, MySQLExtensionConfig } from "./types";

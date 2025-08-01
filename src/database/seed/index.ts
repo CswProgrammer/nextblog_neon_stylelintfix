@@ -1,6 +1,5 @@
 // src/database/seed/index.ts
 import { prisma } from "../client";
-
 import { createPostData } from "./post";
 import { createUserData } from "./user";
 

@@ -1,29 +1,29 @@
-import type { Context, Env } from 'hono';
+import type { Context, Env } from "hono";
 
-import { type Hook, OpenAPIHono, type z } from '@hono/zod-openapi';
-import { prettyJSON } from 'hono/pretty-json';
-import { isNil } from 'lodash';
+import { type Hook, OpenAPIHono, type z } from "@hono/zod-openapi";
+import { prettyJSON } from "hono/pretty-json";
+import { isNil } from "lodash";
 
-import type { HonoAppCreateOptions } from './type';
+import type { HonoAppCreateOptions } from "./type";
 
-import { errorSchema } from './schema';
-import { passportInitialize } from '../auth/utils';
+import { passportInitialize } from "../auth/utils";
+import { errorSchema } from "./schema";
 
 /**
  * 创建Hono应用
  * @param config
  */
 export const createHonoApp = <E extends Env>(config: HonoAppCreateOptions<E> = {}) => {
-    const options: Omit<HonoAppCreateOptions<E>, 'defaultHook'> & {
-        defaultHook?: Hook<any, E, any, any>;
-    } = {};
-    if (config.defaultHook !== false) {
-        options.defaultHook = config.defaultHook ?? defaultValidatorErrorHandler;
-    }
-    const app = new OpenAPIHono<E>(options);
-    app.use(prettyJSON());
-    app.use('*', passportInitialize());
-    return app;
+  const options: Omit<HonoAppCreateOptions<E>, "defaultHook"> & {
+    defaultHook?: Hook<any, E, any, any>;
+  } = {};
+  if (config.defaultHook !== false) {
+    options.defaultHook = config.defaultHook ?? defaultValidatorErrorHandler;
+  }
+  const app = new OpenAPIHono<E>(options);
+  app.use(prettyJSON());
+  app.use("*", passportInitialize());
+  return app;
 };
 
 /**
@@ -33,18 +33,18 @@ export const createHonoApp = <E extends Env>(config: HonoAppCreateOptions<E> = {
  * @param code
  */
 export const createErrorResult = (title: string, error?: any, code?: number) => {
-    let message = title;
-    if (!isNil(error)) {
-        message =
-            error instanceof Error || 'message' in error
-                ? `${title}:${error.message}`
-                : `${title}:${error.toString()}`;
-    }
+  let message = title;
+  if (!isNil(error)) {
+    message =
+      error instanceof Error || "message" in error
+        ? `${title}:${error.message}`
+        : `${title}:${error.toString()}`;
+  }
 
-    return {
-        code,
-        message,
-    };
+  return {
+    code,
+    message,
+  };
 };
 
 /**
@@ -53,16 +53,16 @@ export const createErrorResult = (title: string, error?: any, code?: number) => 
  * @param c
  */
 export const defaultValidatorErrorHandler = (result: any, c: Context) => {
-    if (!result.success) {
-        return c.json(
-            {
-                ...createErrorResult('请求数据验证失败', 400),
-                errors: result.error.format(),
-            },
-            400,
-        );
-    }
-    return result;
+  if (!result.success) {
+    return c.json(
+      {
+        ...createErrorResult("请求数据验证失败", 400),
+        errors: result.error.format(),
+      },
+      400
+    );
+  }
+  return result;
 };
 
 /**
@@ -70,9 +70,9 @@ export const defaultValidatorErrorHandler = (result: any, c: Context) => {
  * @param schema
  */
 export const createBodyRequest = <T>(schema: z.ZodSchema<T>) => {
-    return {
-        body: { content: { 'application/json': { schema } } },
-    };
+  return {
+    body: { content: { "application/json": { schema } } },
+  };
 };
 
 /**
@@ -81,16 +81,18 @@ export const createBodyRequest = <T>(schema: z.ZodSchema<T>) => {
  * @param schema
  */
 export const createResponse = <T, S extends number>(
-    description: string,
-    schema: z.ZodSchema<T>,
-    status: S,
+  description: string,
+  schema: z.ZodSchema<T>,
+  status: S
 ) => {
-    return { [status]: { description, content: { 'application/json': { schema } } } } as {
-        [K in S]: {
-            description: string;
-            content: { 'application/json': { schema: z.ZodSchema<T> } };
-        };
+  return {
+    [status]: { description, content: { "application/json": { schema } } },
+  } as {
+    [K in S]: {
+      description: string;
+      content: { "application/json": { schema: z.ZodSchema<T> } };
     };
+  };
 };
 
 /**
@@ -99,7 +101,7 @@ export const createResponse = <T, S extends number>(
  * @param schema
  */
 export const createSuccessResponse = <T>(description: string, schema: z.ZodSchema<T>) => {
-    return createResponse(description ?? '请求成功', schema, 200);
+  return createResponse(description ?? "请求成功", schema, 200);
 };
 
 /**
@@ -108,7 +110,7 @@ export const createSuccessResponse = <T>(description: string, schema: z.ZodSchem
  * @param schema
  */
 export const create201SuccessResponse = <T>(description: string, schema: z.ZodSchema<T>) => {
-    return createResponse(description ?? '请求成功', schema, 201);
+  return createResponse(description ?? "请求成功", schema, 201);
 };
 
 /**
@@ -116,14 +118,17 @@ export const create201SuccessResponse = <T>(description: string, schema: z.ZodSc
  * @param description
  */
 export const createErrorResponse = <S extends number>(description: string, status: S) => {
-    return {
-        [status]: { description, content: { 'application/json': { schema: errorSchema } } },
-    } as {
-        [K in S]: {
-            description: string;
-            content: { 'application/json': { schema: typeof errorSchema } };
-        };
+  return {
+    [status]: {
+      description,
+      content: { "application/json": { schema: errorSchema } },
+    },
+  } as {
+    [K in S]: {
+      description: string;
+      content: { "application/json": { schema: typeof errorSchema } };
     };
+  };
 };
 
 /**
@@ -131,7 +136,7 @@ export const createErrorResponse = <S extends number>(description: string, statu
  * @param description
  */
 export const createValidatorErrorResponse = (description?: string) => {
-    return createErrorResponse(description ?? '请求数据验证失败', 400);
+  return createErrorResponse(description ?? "请求数据验证失败", 400);
 };
 
 /**
@@ -139,7 +144,7 @@ export const createValidatorErrorResponse = (description?: string) => {
  * @param description
  */
 export const createServerErrorResponse = (description?: string) => {
-    return createErrorResponse(description ?? '服务器错误', 500);
+  return createErrorResponse(description ?? "服务器错误", 500);
 };
 
 /**
@@ -147,7 +152,7 @@ export const createServerErrorResponse = (description?: string) => {
  * @param description
  */
 export const createNotFoundErrorResponse = (description?: string) => {
-    return createErrorResponse(description ?? '数据不存在', 404);
+  return createErrorResponse(description ?? "数据不存在", 404);
 };
 
 /**
@@ -155,5 +160,5 @@ export const createNotFoundErrorResponse = (description?: string) => {
  * @param description
  */
 export const createUnauthorizedErrorResponse = (description?: string) => {
-    return createErrorResponse(description ?? '用户未认证', 401);
+  return createErrorResponse(description ?? "用户未认证", 401);
 };

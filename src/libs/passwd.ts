@@ -1,5 +1,5 @@
 // src/libs/passwd.ts
-import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
+import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 
 /**
  * 生成密码哈希
@@ -7,19 +7,19 @@ import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
  * @returns 格式: salt.hash
  */
 export const hashPassword = (password: string): string => {
-    try {
-        // 生成16字节的随机盐值
-        const salt = randomBytes(16).toString('hex');
-        const hash = scryptSync(password, salt, 64, {
-            N: 16384,
-            r: 8,
-            p: 1,
-        }).toString('hex');
+  try {
+    // 生成16字节的随机盐值
+    const salt = randomBytes(16).toString("hex");
+    const hash = scryptSync(password, salt, 64, {
+      N: 16384,
+      r: 8,
+      p: 1,
+    }).toString("hex");
 
-        return `${salt}.${hash}`;
-    } catch (error) {
-        throw new Error(error as any);
-    }
+    return `${salt}.${hash}`;
+  } catch (error) {
+    throw new Error(error as any);
+  }
 };
 
 /**
@@ -29,22 +29,22 @@ export const hashPassword = (password: string): string => {
  * @returns 密码是否正确
  */
 export const verifyPassword = (password: string, storedHash: string): boolean => {
-    try {
-        const [salt, hash] = storedHash.split('.');
+  try {
+    const [salt, hash] = storedHash.split(".");
 
-        if (!salt || !hash) {
-            return false;
-        }
-
-        // 使用相同的参数
-        const hashVerify = scryptSync(password, salt, 64, {
-            N: 16384,
-            r: 8,
-            p: 1,
-        }).toString('hex');
-
-        return timingSafeEqual(Buffer.from(hash), Buffer.from(hashVerify));
-    } catch {
-        return false;
+    if (!salt || !hash) {
+      return false;
     }
+
+    // 使用相同的参数
+    const hashVerify = scryptSync(password, salt, 64, {
+      N: 16384,
+      r: 8,
+      p: 1,
+    }).toString("hex");
+
+    return timingSafeEqual(Buffer.from(hash), Buffer.from(hashVerify));
+  } catch {
+    return false;
+  }
 };

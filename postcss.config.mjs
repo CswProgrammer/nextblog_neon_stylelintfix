@@ -2,12 +2,12 @@
 /** @type {import('postcss-load-config').Config} */
 const config = {
   plugins: {
-      'postcss-import': {},
-      'postcss-nesting': {},
-      'tailwindcss': {},
-      tailwindcss: {},
-      autoprefixer: {},
-      'postcss-mixins': {},
+    "postcss-import": {},
+    "postcss-nesting": {},
+    tailwindcss: {},
+    tailwindcss: {},
+    autoprefixer: {},
+    "postcss-mixins": {},
   },
 };
 

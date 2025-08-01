@@ -1,14 +1,16 @@
+import type { CookieValueTypes } from "cookies-next";
+
+import { hc } from "hono/client";
+import { isNil } from "lodash";
+import { redirect } from "next/navigation";
+
 //完成
-import type { AppType } from '@/server/main';
-import type { CookieValueTypes } from 'cookies-next';
+import type { AppType } from "@/server/main";
 
-import { appConfig } from '@/config/app';
-import { hc } from 'hono/client';
-import { isNil } from 'lodash';
-import { redirect } from 'next/navigation';
+import { appConfig } from "@/config/app";
 
-import { deleteCookie, getCookie } from './cookies';
-import { ACCESS_TOKEN_COOKIE_NAME } from './token';
+import { deleteCookie, getCookie } from "./cookies";
+import { ACCESS_TOKEN_COOKIE_NAME } from "./token";
 
 /**
  * 获取通用请求头配置
@@ -16,25 +18,25 @@ import { ACCESS_TOKEN_COOKIE_NAME } from './token';
  * @param getToken
  */
 const getHeadersWithAccessToken = (
-    getToken?: () => CookieValueTypes | Promise<CookieValueTypes>,
+  getToken?: () => CookieValueTypes | Promise<CookieValueTypes>
 ) => {
-    return async () => {
-        const headers: Record<string, string> = {};
-        if (!isNil(getToken)) {
-            const token = await getToken();
-            if (!isNil(token) && token.length) {
-                headers.Authorization = `Bearer ${token}`;
-            }
-        }
-        return headers;
-    };
+  return async () => {
+    const headers: Record<string, string> = {};
+    if (!isNil(getToken)) {
+      const token = await getToken();
+      if (!isNil(token) && token.length) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+    }
+    return headers;
+  };
 };
 
 /**
  * 在服务端组件中创建hono api客户端
  */
 const honoApi = hc<AppType>(appConfig.baseUrl, {
-    headers: getHeadersWithAccessToken(async () => getCookie(ACCESS_TOKEN_COOKIE_NAME)),
+  headers: getHeadersWithAccessToken(async () => getCookie(ACCESS_TOKEN_COOKIE_NAME)),
 });
 
 /**
@@ -42,19 +44,19 @@ const honoApi = hc<AppType>(appConfig.baseUrl, {
  * @param run
  */
 const fetchApi = async <F extends (c: ReturnType<typeof hc<AppType>>) => Promise<any>>(
-    run: F,
+  run: F
 ): Promise<ReturnType<F>> => {
-    const result = await run(honoApi);
-    if (!result.ok && result.status === 401) {
-        if (typeof window === 'undefined') {
-            redirect('/auth/login');
-        } else {
-            await deleteCookie(ACCESS_TOKEN_COOKIE_NAME);
-            window.location.href = '/auth/login';
-            return new Promise(() => {}); // 防止后续代码执行
-        }
+  const result = await run(honoApi);
+  if (!result.ok && result.status === 401) {
+    if (typeof window === "undefined") {
+      redirect("/auth/login");
+    } else {
+      await deleteCookie(ACCESS_TOKEN_COOKIE_NAME);
+      window.location.href = "/auth/login";
+      return new Promise(() => {}); // 防止后续代码执行
     }
-    return result;
+  }
+  return result;
 };
 
 export { fetchApi, honoApi };

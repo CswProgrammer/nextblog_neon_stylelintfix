@@ -1,22 +1,23 @@
 .ant-app {
-    @apply tw-h-[100vh] tw-w-full tw-p-0 tw-m-0;
+  @apply tw-h-[100vh] tw-w-full tw-p-0 tw-m-0;
 }
 
 .lucide {
-    @apply tw-w-4 tw-h-4 tw-stroke-[1px];
+  @apply tw-w-4 tw-h-4 tw-stroke-[1px];
 }
 
 .ant-app {
-    @apply tw-h-[100vh] tw-w-full tw-p-0 tw-m-0;
+  @apply tw-h-[100vh] tw-w-full tw-p-0 tw-m-0;
 }
+
 .xicon {
-    @apply tw-w-[1em] tw-h-[1em] tw-inline-flex;
+  @apply tw-w-[1em] tw-h-[1em] tw-inline-flex;
 
-    & svg {
-        @apply !tw-w-full !tw-h-full;
+  & svg {
+    @apply !tw-w-full !tw-h-full;
 
-        &:not([fill]) {
-            fill: currentcolor;
-        }
+    &:not([fill]) {
+      fill: currentcolor;
     }
+  }
 }

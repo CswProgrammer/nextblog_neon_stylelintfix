@@ -365,7 +365,7 @@ export class Post {
 一个被验证的类的对象可以定义在类中不存在的属性，在验证时不会产生错误。为了使只有添加了**验证装饰器**的属性才能被定义，你需要把`whitelist`设置为`true`，那么如果对象中定义一个类中不存在的属性就无法通过验证了。
 
 ```javascript
-import { validate } from 'class-validator';
+import { validate } from "class-validator";
 // ...
 validate(post, { whitelist: true });
 ```
@@ -410,7 +410,7 @@ validate(post).then(errors => {
 > 这个一般不要设置，否则属性添加@Allow会都没用了
 
 ```javascript
-import { validate } from 'class-validator';
+import { validate } from "class-validator";
 // ...
 validate(post, { whitelist: true, forbidNonWhitelisted: true });
 ```
@@ -445,7 +445,7 @@ validate(model).then(errors => {
 有时候你需要跳过一些对象中没有设置的属性，比如更新数据模型时，与创建模型不同的是你只会更新部分值，那么这时候你就需要设置`skipMissingProperties`为`true`，当然可能一部分属性是你不想被跳过验证的，那么需要在这些属性上加上`@IsDefined()`装饰器，加了`@IsDefined()`装饰器的属性会忽略`skipMissingProperties`而必定被验证
 
 ```javascript
-import { validate } from 'class-validator';
+import { validate } from "class-validator";
 // ...
 validate(post, { skipMissingProperties: true });
 ```
@@ -500,8 +500,8 @@ validate(user, {
 你可以使用服务容器来加载验证器通过依赖注入的方式使用。以下如何将其与[typedi](https://github.com/pleerock/typedi)集成的示例：
 
 ```javascript
-import { Container } from 'typedi';
-import { useContainer, Validator } from 'class-validator';
+import { Container } from "typedi";
+import { useContainer, Validator } from "class-validator";
 
 // do this somewhere in the global application level:
 useContainer(Container);
@@ -692,24 +692,24 @@ class User {
 
 ```json
 [
-    {
-        "id": 1,
-        "firstName": "Johny",
-        "lastName": "Cage",
-        "age": 27
-    },
-    {
-        "id": 2,
-        "firstName": "Ismoil",
-        "lastName": "Somoni",
-        "age": 50
-    },
-    {
-        "id": 3,
-        "firstName": "Luke",
-        "lastName": "Dacascos",
-        "age": 12
-    }
+  {
+    "id": 1,
+    "firstName": "Johny",
+    "lastName": "Cage",
+    "age": 27
+  },
+  {
+    "id": 2,
+    "firstName": "Ismoil",
+    "lastName": "Somoni",
+    "age": 50
+  },
+  {
+    "id": 3,
+    "firstName": "Luke",
+    "lastName": "Dacascos",
+    "age": 12
+  }
 ]
 ```
 
@@ -759,7 +759,7 @@ fetch("users.json").then((users: Object[]) => {
 
 2. 安装`reflect-metadata`
 
-    > reflect-metadata是必须的，具体使用请看[这篇博文](./2022-06-23-ts-decorator.md)
+   > reflect-metadata是必须的，具体使用请看[这篇博文](./2022-06-23-ts-decorator.md)
 
 安装后在`app.ts`这种顶层文件你需要`import "reflect-metadata";`
 
@@ -770,7 +770,7 @@ fetch("users.json").then((users: Object[]) => {
 普通对象转换为类对象
 
 ```javascript
-import { plainToClass } from 'class-transformer';
+import { plainToClass } from "class-transformer";
 
 let users = plainToClass(User, userJson); // to convert user plain object a single user. also supports arrays
 ```
@@ -781,7 +781,7 @@ let users = plainToClass(User, userJson); // to convert user plain object a sing
 
 ```javascript
 const defaultUser = new User();
-defaultUser.role = 'user';
+defaultUser.role = "user";
 
 let mixedUser = plainToClassFromExist(defaultUser, user); // mixed user should have the value role = user when no value is set otherwise.
 ```
@@ -793,7 +793,7 @@ let mixedUser = plainToClassFromExist(defaultUser, user); // mixed user should h
 > 转换后可以使用`JSON.stringify`再转成普通的json文本
 
 ```javascript
-import { classToPlain } from 'class-transformer';
+import { classToPlain } from "class-transformer";
 let photo = classToPlain(photo);
 ```
 
@@ -802,7 +802,7 @@ let photo = classToPlain(photo);
 克隆类实例
 
 ```javascript
-import { classToClass } from 'class-transformer';
+import { classToClass } from "class-transformer";
 let photo = classToClass(photo);
 ```
 
@@ -813,7 +813,7 @@ let photo = classToClass(photo);
 直接把类实例转换为json文本,是不是数组都可以转换
 
 ```javascript
-import { serialize } from 'class-transformer';
+import { serialize } from "class-transformer";
 let photo = serialize(photo);
 ```
 
@@ -822,14 +822,14 @@ let photo = serialize(photo);
 直接把json文本转换为类对象
 
 ```javascript
-import { deserialize } from 'class-transformer';
+import { deserialize } from "class-transformer";
 let photo = deserialize(Photo, photo);
 ```
 
 如果json文本是个对象数组请使用`deserializeArray`方法
 
 ```javascript
-import { deserializeArray } from 'class-transformer';
+import { deserializeArray } from "class-transformer";
 let photos = deserializeArray(Photo, photos);
 ```
 
@@ -1092,8 +1092,8 @@ export class User {
 另外，您可以在转换期间设置排除策略：
 
 ```javascript
-import { classToPlain } from 'class-transformer';
-let photo = classToPlain(photo, { strategy: 'excludeAll' });
+import { classToPlain } from "class-transformer";
+let photo = classToPlain(photo, { strategy: "excludeAll" });
 ```
 
 这时你不需要在添加`@Exclude`装饰器了

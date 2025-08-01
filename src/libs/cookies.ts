@@ -1,24 +1,24 @@
 // src/libs/coolkies.ts
-import type { SerializeOptions as CookieSerializeOptions } from 'cookie';
+import type { SerializeOptions as CookieSerializeOptions } from "cookie";
 
 import {
-    deleteCookie as deleteClientCookie,
-    getCookie as getClientCookie,
-    getCookies as getClientCookies,
-    hasCookie as hasClientCookie,
-    setCookie as setClientCookie,
-} from 'cookies-next';
+  deleteCookie as deleteClientCookie,
+  getCookie as getClientCookie,
+  getCookies as getClientCookies,
+  hasCookie as hasClientCookie,
+  setCookie as setClientCookie,
+} from "cookies-next";
 
 /**
  * 获取所有cookies
  * @param options
  */
 export const getCookies = async (options?: CookieSerializeOptions) => {
-    if (typeof window === 'undefined') {
-        const { cookies } = await import('next/headers');
-        return (await cookies()).getAll();
-    }
-    return getClientCookies(options);
+  if (typeof window === "undefined") {
+    const { cookies } = await import("next/headers");
+    return (await cookies()).getAll();
+  }
+  return getClientCookies(options);
 };
 
 /**
@@ -27,11 +27,11 @@ export const getCookies = async (options?: CookieSerializeOptions) => {
  * @param options
  */
 export const hasCookie = async (key: string, options?: CookieSerializeOptions) => {
-    if (typeof window === 'undefined') {
-        const { cookies } = await import('next/headers');
-        return (await cookies()).has(key);
-    }
-    return hasClientCookie(key, options);
+  if (typeof window === "undefined") {
+    const { cookies } = await import("next/headers");
+    return (await cookies()).has(key);
+  }
+  return hasClientCookie(key, options);
 };
 
 /**
@@ -40,11 +40,11 @@ export const hasCookie = async (key: string, options?: CookieSerializeOptions) =
  * @param options
  */
 export const getCookie = async (key: string, options?: CookieSerializeOptions) => {
-    if (typeof window === 'undefined') {
-        const { cookies } = await import('next/headers');
-        return (await cookies()).get(key)?.value;
-    }
-    return getClientCookie(key, options);
+  if (typeof window === "undefined") {
+    const { cookies } = await import("next/headers");
+    return (await cookies()).get(key)?.value;
+  }
+  return getClientCookie(key, options);
 };
 
 /**
@@ -54,7 +54,7 @@ export const getCookie = async (key: string, options?: CookieSerializeOptions) =
  * @param options
  */
 export const setCookie = async (key: string, value: string, options?: CookieSerializeOptions) => {
-    if (typeof window !== 'undefined') setClientCookie(key, value, options);
+  if (typeof window !== "undefined") setClientCookie(key, value, options);
 };
 
 /**
@@ -63,5 +63,5 @@ export const setCookie = async (key: string, value: string, options?: CookieSeri
  * @param options
  */
 export const deleteCookie = async (key: string, options?: CookieSerializeOptions) => {
-    if (typeof window !== 'undefined') deleteClientCookie(key, options);
+  if (typeof window !== "undefined") deleteClientCookie(key, options);
 };

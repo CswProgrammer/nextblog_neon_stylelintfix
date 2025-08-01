@@ -1,11 +1,11 @@
-import type { z } from 'zod';
+import type { z } from "zod";
 
 import type {
-    getPostItemRequestSchema,
-    postItemResponseSchema,
-    postPageNumbersResponseSchema,
-    postPaginateResponseSchema,
-} from './schema';
+  getPostItemRequestSchema,
+  postItemResponseSchema,
+  postPageNumbersResponseSchema,
+  postPaginateResponseSchema,
+} from "./schema";
 
 /**
  * 文章查询响应数据类型

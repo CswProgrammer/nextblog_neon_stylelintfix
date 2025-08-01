@@ -1,9 +1,9 @@
-import type { StateCreator } from 'zustand';
-import type { DevtoolsOptions, PersistOptions } from 'zustand/middleware';
+import type { StateCreator } from "zustand";
+import type { DevtoolsOptions, PersistOptions } from "zustand/middleware";
 
-import { createStore as createStoreFunction } from 'zustand';
-import { devtools, persist, redux, subscribeWithSelector } from 'zustand/middleware';
-import { immer } from 'zustand/middleware/immer';
+import { createStore as createStoreFunction } from "zustand";
+import { devtools, persist, redux, subscribeWithSelector } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
 
 /**
  * 创建包含订阅，immer以及devtoools功能的普通状态商店
@@ -11,19 +11,17 @@ import { immer } from 'zustand/middleware/immer';
  * @param devtoolsOptions
  */
 export const createStore = <T extends object>(
-    creator: StateCreator<
-        T,
-        [
-            ['zustand/subscribeWithSelector', never],
-            ['zustand/immer', never],
-            ['zustand/devtools', never],
-        ]
-    >,
-    devtoolsOptions?: DevtoolsOptions,
+  creator: StateCreator<
+    T,
+    [
+      ["zustand/subscribeWithSelector", never],
+      ["zustand/immer", never],
+      ["zustand/devtools", never],
+    ]
+  >,
+  devtoolsOptions?: DevtoolsOptions
 ) => {
-    return createStoreFunction<T>()(
-        subscribeWithSelector(immer(devtools(creator, devtoolsOptions))),
-    );
+  return createStoreFunction<T>()(subscribeWithSelector(immer(devtools(creator, devtoolsOptions))));
 };
 
 /**
@@ -34,23 +32,23 @@ export const createStore = <T extends object>(
  * @param devtoolsOptions
  */
 export const createPersistStore = <T extends object, P = T>(
-    creator: StateCreator<
-        T,
-        [
-            ['zustand/subscribeWithSelector', never],
-            ['zustand/immer', never],
-            ['zustand/devtools', never],
-            ['zustand/persist', P],
-        ]
-    >,
-    persistOptions: PersistOptions<T, P>,
-    devtoolsOptions?: DevtoolsOptions,
+  creator: StateCreator<
+    T,
+    [
+      ["zustand/subscribeWithSelector", never],
+      ["zustand/immer", never],
+      ["zustand/devtools", never],
+      ["zustand/persist", P],
+    ]
+  >,
+  persistOptions: PersistOptions<T, P>,
+  devtoolsOptions?: DevtoolsOptions
 ) => {
-    return createStoreFunction<T>()(
-        subscribeWithSelector(
-            immer(devtools(persist(creator as unknown as any, persistOptions), devtoolsOptions)),
-        ),
-    );
+  return createStoreFunction<T>()(
+    subscribeWithSelector(
+      immer(devtools(persist(creator as unknown as any, persistOptions), devtoolsOptions))
+    )
+  );
 };
 
 /**
@@ -61,18 +59,18 @@ export const createPersistStore = <T extends object, P = T>(
  * @param devtoolsOptions
  */
 export const createReduxStore = <
-    T extends object,
-    A extends {
-        type: string;
-    },
+  T extends object,
+  A extends {
+    type: string;
+  },
 >(
-    reducer: (state: T, action: A) => T,
-    initialState: T,
-    devtoolsOptions?: DevtoolsOptions,
+  reducer: (state: T, action: A) => T,
+  initialState: T,
+  devtoolsOptions?: DevtoolsOptions
 ) =>
-    createStoreFunction(
-        subscribeWithSelector(immer(devtools(redux(reducer, initialState), devtoolsOptions))),
-    );
+  createStoreFunction(
+    subscribeWithSelector(immer(devtools(redux(reducer, initialState), devtoolsOptions)))
+  );
 
 /**
  * 创建包含订阅，immer以及devtoools功能的reducer状态商店
@@ -82,24 +80,19 @@ export const createReduxStore = <
  * @param devtoolsOptions
  */
 export const createPersistReduxStore = <
-    T extends object,
-    A extends {
-        type: string;
-    },
-    P = T,
+  T extends object,
+  A extends {
+    type: string;
+  },
+  P = T,
 >(
-    reducer: (state: T, action: A) => T,
-    initialState: T,
-    persistOptions: PersistOptions<T, P>,
-    devtoolsOptions?: DevtoolsOptions,
+  reducer: (state: T, action: A) => T,
+  initialState: T,
+  persistOptions: PersistOptions<T, P>,
+  devtoolsOptions?: DevtoolsOptions
 ) =>
-    createStoreFunction(
-        subscribeWithSelector(
-            immer(
-                devtools(
-                    persist(redux(reducer, initialState), persistOptions as any),
-                    devtoolsOptions,
-                ),
-            ),
-        ),
-    );
+  createStoreFunction(
+    subscribeWithSelector(
+      immer(devtools(persist(redux(reducer, initialState), persistOptions as any), devtoolsOptions))
+    )
+  );

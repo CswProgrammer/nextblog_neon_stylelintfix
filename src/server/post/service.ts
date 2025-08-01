@@ -1,27 +1,29 @@
-'use server';
+"use server";
 
-import type { PaginateOptions, PaginateReturn } from '@/libs/db/types';
-import type { Post, Prisma } from '@prisma/client';
+import type { Post, Prisma } from "@prisma/client";
 
-import db from '@/libs/db/client';
-import { paginateTransform } from '@/libs/db/utils';
-import { getRandomInt } from '@/libs/random';
-import { isNil } from 'lodash';
+import { isNil } from "lodash";
+
+import type { PaginateOptions, PaginateReturn } from "@/libs/db/types";
+
+import db from "@/libs/db/client";
+import { paginateTransform } from "@/libs/db/utils";
+import { getRandomInt } from "@/libs/random";
 
 /**
  * 查询分页文章列表信息
  * @param options
  */
 export const queryPostPaginate = async (
-    options?: PaginateOptions,
+  options?: PaginateOptions
 ): Promise<PaginateReturn<Post>> => {
-    const data = await db.post.paginate({
-        orderBy: [{ updatedAt: 'desc' }, { createdAt: 'desc' }],
-        page: 1,
-        limit: 8,
-        ...options,
-    });
-    return paginateTransform(data);
+  const data = await db.post.paginate({
+    orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
+    page: 1,
+    limit: 8,
+    ...options,
+  });
+  return paginateTransform(data);
 };
 
 /**
@@ -29,25 +31,25 @@ export const queryPostPaginate = async (
  * @param limit
  */
 export const queryPostTotalPages = async (limit = 8): Promise<number> => {
-    const data = await queryPostPaginate({ page: 1, limit });
-    return data.meta.totalPages ?? 0;
+  const data = await queryPostPaginate({ page: 1, limit });
+  return data.meta.totalPages ?? 0;
 };
 /**
  * 根据id或slug查询文章信息
  * @param arg
  */
 export const queryPostItem = async (arg: string): Promise<Post | null> => {
-    const item = await db.post.findFirst({
-        where: {
-            OR: [
-                { id: arg },
-                {
-                    slug: arg,
-                },
-            ],
+  const item = await db.post.findFirst({
+    where: {
+      OR: [
+        { id: arg },
+        {
+          slug: arg,
         },
-    });
-    return item;
+      ],
+    },
+  });
+  return item;
 };
 
 /**
@@ -55,8 +57,8 @@ export const queryPostItem = async (arg: string): Promise<Post | null> => {
  * @param slug
  */
 export const queryPostItemBySlug = async (slug: string): Promise<Post | null> => {
-    const item = await db.post.findUnique({ where: { slug } });
-    return item;
+  const item = await db.post.findUnique({ where: { slug } });
+  return item;
 };
 
 /**
@@ -64,8 +66,8 @@ export const queryPostItemBySlug = async (slug: string): Promise<Post | null> =>
  * @param id
  */
 export const queryPostItemById = async (id: string): Promise<Post | null> => {
-    const item = await db.post.findUnique({ where: { id } });
-    return item;
+  const item = await db.post.findUnique({ where: { id } });
+  return item;
 };
 
 /**
@@ -73,12 +75,12 @@ export const queryPostItemById = async (id: string): Promise<Post | null> => {
  * @param data
  */
 export const createPostItem = async (
-    data: Omit<Prisma.PostCreateInput, 'thumb'>,
+  data: Omit<Prisma.PostCreateInput, "thumb">
 ): Promise<Post> => {
-    const item = await db.post.create({
-        data: { ...data, thumb: `/uploads/thumb/post-${getRandomInt(1, 8)}.png` },
-    });
-    return item;
+  const item = await db.post.create({
+    data: { ...data, thumb: `/uploads/thumb/post-${getRandomInt(1, 8)}.png` },
+  });
+  return item;
 };
 
 /**
@@ -87,11 +89,11 @@ export const createPostItem = async (
  * @param data
  */
 export const updatePostItem = async (
-    id: string,
-    data: Partial<Omit<Post, 'id'>>,
+  id: string,
+  data: Partial<Omit<Post, "id">>
 ): Promise<Post> => {
-    const item = await db.post.update({ where: { id }, data });
-    return item;
+  const item = await db.post.update({ where: { id }, data });
+  return item;
 };
 
 /**
@@ -99,12 +101,12 @@ export const updatePostItem = async (
  * @param id
  */
 export const deletePostItem = async (id: string): Promise<Post | null> => {
-    const item = await db.post.findUnique({ where: { id } });
-    if (!isNil(item)) {
-        await db.post.delete({ where: { id } });
-        return item;
-    }
-    return null;
+  const item = await db.post.findUnique({ where: { id } });
+  if (!isNil(item)) {
+    await db.post.delete({ where: { id } });
+    return item;
+  }
+  return null;
 };
 
 /**
@@ -112,8 +114,8 @@ export const deletePostItem = async (id: string): Promise<Post | null> => {
  * @param id
  */
 export const isSlugUnique = async (id?: string) => async (val?: string | null) => {
-    if (isNil(val) || !val.length) return true;
-    const post = await queryPostItemBySlug(val);
-    if (isNil(post) || post.id === id) return true;
-    return false;
+  if (isNil(val) || !val.length) return true;
+  const post = await queryPostItemBySlug(val);
+  if (isNil(post) || post.id === id) return true;
+  return false;
 };

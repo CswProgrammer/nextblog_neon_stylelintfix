@@ -1,9 +1,9 @@
 // src/lib/db.ts
 
 // ...
-import { PrismaClient } from '@prisma/client';
-import paginateExt from 'prisma-paginate';
+import { PrismaClient } from "@prisma/client";
+import paginateExt from "prisma-paginate";
 
-const prismaClientSingleton = () => {
-    return new PrismaClient().$extends(paginateExt);
+const _prismaClientSingleton = () => {
+  return new PrismaClient().$extends(paginateExt);
 };

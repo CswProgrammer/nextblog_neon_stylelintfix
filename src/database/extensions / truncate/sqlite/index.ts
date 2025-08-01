@@ -1,2 +1,2 @@
-export { truncateSQLiteTable } from './sqlite';
-export type { SQLiteConfig, SQLiteExtensionConfig } from './types';
+export { truncateSQLiteTable } from "./sqlite";
+export type { SQLiteConfig, SQLiteExtensionConfig } from "./types";
