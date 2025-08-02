@@ -26,7 +26,7 @@ export const authRoutes = {
     responses: {
       ...createSuccessResponse(
         "获取成功",
-        authProfileResponseSchema.openapi("获取用户信息响应数据")
+        authProfileResponseSchema.openapi("获取用户信息响应数据"),
       ),
       ...createServerErrorResponse(),
     },
@@ -52,7 +52,10 @@ export const authRoutes = {
     path: "/logout",
     responses: {
       ...createUnauthorizedErrorResponse(),
-      ...createSuccessResponse("登出成功", authLogoutResponseSchema.openapi("登出响应数据")),
+      ...createSuccessResponse(
+        "登出成功",
+        authLogoutResponseSchema.openapi("登出响应数据"),
+      ),
       ...createServerErrorResponse(),
     },
   }),

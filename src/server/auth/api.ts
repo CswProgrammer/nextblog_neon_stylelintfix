@@ -8,7 +8,12 @@ import type { AuthItem } from "./types";
 import { createErrorResult, createHonoApp } from "../common/utils";
 import { authRoutes } from "./routes";
 import { getUser } from "./service";
-import { addTokenToBlacklist, createAuthenticatedHandler, passport, verifyJWT } from "./utils";
+import {
+  addTokenToBlacklist,
+  createAuthenticatedHandler,
+  passport,
+  verifyJWT,
+} from "./utils";
 
 const app = createHonoApp();
 
@@ -56,5 +61,5 @@ export const authApi = app
       } catch (error) {
         return c.json(createErrorResult("登出失败", error), 500);
       }
-    })
+    }),
   );

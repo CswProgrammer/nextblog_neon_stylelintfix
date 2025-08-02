@@ -1,4 +1,3 @@
-//完成
 import type { RouteConfig, RouteHandler } from "@hono/zod-openapi";
 import type { Context, Next } from "hono";
 
@@ -37,16 +36,20 @@ export const passportInitialize = () => async (c: Context, next: Next) => {
  */
 passport.use(
   "local",
-  new LocalStrategy({ usernameField: "credential" }, async (credential, password, done) => {
-    try {
-      const user = await validateUser(credential, password);
-      if (typeof user === "boolean" && !user) done({ message: "密码错误", code: 401 });
-      if (isNil(user)) done({ message: "用户不存在", code: 401 });
-      done(null, user as any);
-    } catch (error) {
-      done(error);
-    }
-  })
+  new LocalStrategy(
+    { usernameField: "credential" },
+    async (credential, password, done) => {
+      try {
+        const user = await validateUser(credential, password);
+        if (typeof user === "boolean" && !user)
+          done({ message: "密码错误", code: 401 });
+        if (isNil(user)) done({ message: "用户不存在", code: 401 });
+        done(null, user as any);
+      } catch (error) {
+        done(error);
+      }
+    },
+  ),
 );
 
 /**
@@ -65,8 +68,8 @@ passport.use(
       } catch (error) {
         return done(error, false);
       }
-    }
-  )
+    },
+  ),
 );
 
 /**
@@ -75,21 +78,25 @@ passport.use(
  */
 export const verifyJWT = async (c: Context) =>
   new Promise<boolean>((resolve) => {
-    passport.authenticate("jwt", { session: false }, async (err: any, user: AuthItem) => {
-      if (err || !user) {
-        resolve(false);
-        return;
-      }
-      const token = getAccessTokenFromHeader(c.req.raw as any);
-      // 检查token是否在黑名单中
-      if (token && (await isTokenInBlacklist(token))) {
-        resolve(false);
-        return;
-      }
-      // 将用户信息添加到请求中，供后续api处理器使用
-      (c.req as any).user = user;
-      resolve(true);
-    })(c.req.raw, (c.res as any).raw);
+    passport.authenticate(
+      "jwt",
+      { session: false },
+      async (err: any, user: AuthItem) => {
+        if (err || !user) {
+          resolve(false);
+          return;
+        }
+        const token = getAccessTokenFromHeader(c.req.raw as any);
+        // 检查token是否在黑名单中
+        if (token && (await isTokenInBlacklist(token))) {
+          resolve(false);
+          return;
+        }
+        // 将用户信息添加到请求中，供后续api处理器使用
+        (c.req as any).user = user;
+        resolve(true);
+      },
+    )(c.req.raw, (c.res as any).raw);
   });
 
 /**
@@ -97,7 +104,7 @@ export const verifyJWT = async (c: Context) =>
  * @param handler
  */
 export const createAuthenticatedHandler = <R extends RouteConfig>(
-  handler: RouteHandler<R>
+  handler: RouteHandler<R>,
 ): RouteHandler<R> =>
   (async (c: Parameters<RouteHandler<R>>[0], next: Next) => {
     try {
@@ -131,7 +138,10 @@ export const addTokenToBlacklist = async (token: string): Promise<boolean> => {
     return true;
   } catch (error) {
     // token已过期或无效，无需加入黑名单
-    if (error instanceof jwt.TokenExpiredError || error instanceof jwt.JsonWebTokenError) {
+    if (
+      error instanceof jwt.TokenExpiredError ||
+      error instanceof jwt.JsonWebTokenError
+    ) {
       return false;
     }
     throw new Error(error as any);
